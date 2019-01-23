@@ -8,7 +8,6 @@ public class ItemManager : MonoBehaviour {
     public static ItemManager instance;
 
     public Dictionary<Items, int> itemsInProperty;
-    public Items itemSelected = Items.Potion;
 
     public delegate void UpdateAllUI();
     public static event UpdateAllUI onEraseData;
@@ -20,6 +19,26 @@ public class ItemManager : MonoBehaviour {
         FuryPotion,
         StealthPotion,
         GodPotion
+    }
+
+    public Items StringToEnum(string _name)
+    {
+        switch (_name)
+        {
+            case "Potion":
+                return Items.Potion;
+            case "SuperPotion":
+                return Items.SuperPotion;
+            case "FuryPotion":
+                return Items.FuryPotion;
+            case "StealthPotion":
+                return Items.StealthPotion;
+            case "GodPotion":
+                return Items.GodPotion;
+            default:
+                Debug.LogError("The string given does not match with the name of an Item");
+                return Items.Potion;
+        }
     }
 
 	void Awake () 
@@ -48,14 +67,12 @@ public class ItemManager : MonoBehaviour {
     public void LoadItems()
     {
         ItemsData data = SaveSystem.LoadItems();
-        itemSelected = data.itemSelected;
 
-        itemsInProperty = new Dictionary<Items, int>();
-        System.Array itemsList = System.Enum.GetValues(typeof(Items));
+        SetUpItemsDictionary();
 
-        foreach(Items item in itemsList)
+        for (int i = 0; i < data.itemsInPropertyAmmount.Count; i++)
         {
-            itemsInProperty.Add(item, data.itemsInProperty[(int)item]);
+            itemsInProperty[StringToEnum(data.itemsInPropertyName[i])] = data.itemsInPropertyAmmount[i];
         }
     }
 
@@ -90,5 +107,15 @@ public class ItemManager : MonoBehaviour {
         SetUpItemsDictionary();
         onEraseData();
         Debug.Log("All the data was erased. WOW!");
+    }
+
+    public bool AddItems(Items _item, int _value)
+    {
+        if(itemsInProperty[_item] + _value >= 0)
+        {
+            itemsInProperty[_item] += _value;
+            return true;
+        }
+        return false;
     }
 }

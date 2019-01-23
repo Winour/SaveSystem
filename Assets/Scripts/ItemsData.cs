@@ -5,24 +5,29 @@ using UnityEngine;
 [System.Serializable]
 public class ItemsData
 {
-    public ItemManager.Items itemSelected;
-    public int[] itemsInProperty;
+    public List<int> itemsInPropertyAmmount;
+    public List<string> itemsInPropertyName;
 
     public ItemsData()
     {
-        System.Array itemsList = System.Enum.GetValues(typeof(ItemManager.Items));
-        itemsInProperty = new int[itemsList.Length];
+        itemsInPropertyAmmount = new List<int>();
+        itemsInPropertyName = new List<string>();
     }
 
     public ItemsData(ItemManager itemManager)
     {
-        itemSelected = itemManager.itemSelected;
-
         System.Array itemsList = System.Enum.GetValues(typeof(ItemManager.Items));
-        itemsInProperty = new int[itemsList.Length];
+
+        itemsInPropertyAmmount = new List<int>();
+        itemsInPropertyName = new List<string>();
+
         foreach (ItemManager.Items item in itemsList)
         {
-            itemsInProperty[(int)item] = itemManager.itemsInProperty[item];
+            if(itemManager.itemsInProperty[item] != 0)
+            {
+                itemsInPropertyName.Add(item.ToString());
+                itemsInPropertyAmmount.Add(itemManager.itemsInProperty[item]);
+            }
         }
     }
 	

@@ -5,11 +5,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 public static class SaveSystem {
 
     private static string itemsArchiveName = "/items.drl";
+    private static string path;
+    private static BinaryFormatter formatter;
+
+    static SaveSystem()
+    {
+        formatter = new BinaryFormatter();
+        path = Application.persistentDataPath + itemsArchiveName;
+    }
 
     public static void SaveItems(ItemManager itemManager)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + itemsArchiveName;
         FileStream stream = new FileStream(path, FileMode.Create);
 
         ItemsData data = new ItemsData(itemManager);
@@ -21,10 +27,8 @@ public static class SaveSystem {
 
     public static ItemsData LoadItems()
     {
-        string path = Application.persistentDataPath + itemsArchiveName;
         if (File.Exists(path))
         {
-            BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
             ItemsData data = formatter.Deserialize(stream) as ItemsData;
