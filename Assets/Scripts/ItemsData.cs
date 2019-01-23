@@ -14,7 +14,7 @@ public class ItemsData
         itemsInPropertyName = new List<string>();
     }
 
-    public ItemsData(ItemManager itemManager)
+    public ItemsData(ItemManager _itemManager)
     {
         System.Array itemsList = System.Enum.GetValues(typeof(ItemManager.Items));
 
@@ -23,10 +23,10 @@ public class ItemsData
 
         foreach (ItemManager.Items item in itemsList)
         {
-            if(itemManager.itemsInProperty[item] != 0)
+            if(_itemManager.itemsInProperty[item] != 0)
             {
                 itemsInPropertyName.Add(item.ToString());
-                itemsInPropertyAmmount.Add(itemManager.itemsInProperty[item]);
+                itemsInPropertyAmmount.Add(_itemManager.itemsInProperty[item]);
             }
         }
     }
