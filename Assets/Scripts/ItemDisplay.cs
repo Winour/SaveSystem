@@ -10,12 +10,12 @@ public class ItemDisplay : MonoBehaviour {
     private ItemInfo itemInfo;
     [SerializeField]
     private Image itemIcon;
+#pragma warning disable 649  
     [SerializeField]
-    private TextMeshProUGUI itemName;
-    [SerializeField]
-    private TextMeshProUGUI itemAmmount;
+    private TextMeshProUGUI itemName, itemAmmount;
+#pragma warning restore 649
 
-	void Start () 
+    void Start () 
 	{
         itemIcon.sprite = itemInfo.itemIcon;
         itemName.text = itemInfo.itemName;
@@ -25,8 +25,10 @@ public class ItemDisplay : MonoBehaviour {
 	
 	public void AddItems(int _value)
     {
-        ItemManager.instance.itemsInProperty[itemInfo.item] += _value;
-        UpdateItems();
+        if (ItemManager.instance.AddItems(itemInfo.item, _value))
+        {
+            UpdateItems();
+        }
     }
 
     private void UpdateItems()
