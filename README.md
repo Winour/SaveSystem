@@ -1,2 +1,2 @@
 # SaveSystem
-A Save System in which I usa Scriptable Objects, Delegates and obviously BinaryFormatter and FileStream
+A Save System in which I use Scriptable Objects, Delegates and obviously BinaryFormatter and FileStream
