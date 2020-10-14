@@ -1,38 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class ItemDisplay : MonoBehaviour {
 
-    [SerializeField]
-    private ItemInfo itemInfo;
-    [SerializeField]
-    private Image itemIcon;
-#pragma warning disable 649  
-    [SerializeField]
-    private TextMeshProUGUI itemName, itemAmmount;
-#pragma warning restore 649
+    [SerializeField] private ItemInfo _itemInfo;
+    [SerializeField] private Image _icon;
+    [SerializeField] private TextMeshProUGUI _itemNameDisplay;
+    [SerializeField] private TextMeshProUGUI _itemAmmountDisplay;
 
     void Start () 
 	{
-        itemIcon.sprite = itemInfo.itemIcon;
-        itemName.text = itemInfo.itemName;
-        itemAmmount.text = ItemManager.instance.itemsInProperty[itemInfo.item].ToString("G0");
-        ItemManager.onEraseData += UpdateItems;
+        ItemManager.onEraseData += UpdateItemsAmmount;
 	}
-	
-	public void AddItems(int _value)
+
+    public void UpdateItemDisplay()
     {
-        if (ItemManager.instance.AddItems(itemInfo.item, _value))
-        {
-            UpdateItems();
-        }
+        _icon.sprite = _itemInfo.itemIcon;
+        _itemNameDisplay.text = _itemInfo.itemName;
+        UpdateItemsAmmount();
+    }
+	
+    public void ResetItemDisplay()
+    {
+        _icon.sprite = null;
+        _itemNameDisplay.text = "Name";
+        _itemAmmountDisplay.text = "99999";
     }
 
-    private void UpdateItems()
+	public void AddItems(int value)
     {
-        itemAmmount.text = ItemManager.instance.itemsInProperty[itemInfo.item].ToString("G0");
+        if(ItemManager.instance.AddItems(_itemInfo.item, value))
+            UpdateItemsAmmount();
+    }
+
+    private void UpdateItemsAmmount()
+    {
+        if(ItemManager.instance != null && _itemInfo != null && ItemManager.instance.itemsInProperty.ContainsKey(_itemInfo.item))
+            _itemAmmountDisplay.text = ItemManager.instance.itemsInProperty[_itemInfo.item].ToString("G0");
     }
 }

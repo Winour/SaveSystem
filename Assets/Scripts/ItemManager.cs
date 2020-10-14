@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour {
 
@@ -9,8 +7,8 @@ public class ItemManager : MonoBehaviour {
 
     public Dictionary<Items, int> itemsInProperty;
 
-    public delegate void UpdateAllUI();
-    public static event UpdateAllUI onEraseData;
+    public delegate void OnEraseData();
+    public static event OnEraseData onEraseData;
 
     public enum Items
     {
@@ -18,12 +16,13 @@ public class ItemManager : MonoBehaviour {
         SuperPotion,
         FuryPotion,
         StealthPotion,
-        GodPotion
+        GodPotion,
+        None
     }
 
-    public Items StringToEnum(string _name)
+    public Items StringToEnum(string name)
     {
-        switch (_name)
+        switch (name)
         {
             case "Potion":
                 return Items.Potion;
@@ -37,21 +36,19 @@ public class ItemManager : MonoBehaviour {
                 return Items.GodPotion;
             default:
                 Debug.LogError("The string given does not match with the name of an Item");
-                return Items.Potion;
+                return Items.None;
         }
     }
 
 	void Awake () 
 	{
-		if(instance == null)
-        {
+        if(instance == null)
             instance = this;
-        }
         else
         {
             Destroy(this);
+            return;
         }
-
         if (PlayerPrefs.GetInt("FirstRun") == 0)
         {
             Debug.Log("First time running this App. Nice! Let's create your saved items file.");
@@ -105,15 +102,15 @@ public class ItemManager : MonoBehaviour {
         SaveSystem.DeleteItems();
         PlayerPrefs.SetInt("FirstRun", 0);
         SetUpItemsDictionary();
-        onEraseData();
+        onEraseData?.Invoke();
         Debug.Log("All the data was erased. WOW!");
     }
 
-    public bool AddItems(Items _item, int _value)
+    public bool AddItems(Items item, int value)
     {
-        if(itemsInProperty[_item] + _value >= 0)
+        if(itemsInProperty[item] + value >= 0)
         {
-            itemsInProperty[_item] += _value;
+            itemsInProperty[item] += value;
             return true;
         }
         return false;

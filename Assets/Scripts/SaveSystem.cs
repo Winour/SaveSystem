@@ -14,11 +14,11 @@ public static class SaveSystem {
         path = Application.persistentDataPath + itemsArchiveName;
     }
 
-    public static void SaveItems(ItemManager _itemManager)
+    public static void SaveItems(ItemManager itemManager)
     {
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        ItemsData data = new ItemsData(_itemManager);
+        ItemsData data = new ItemsData(itemManager);
 
         formatter.Serialize(stream, data);
         stream.Close();
